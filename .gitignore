@@ -28,7 +28,7 @@ proguard/
 *.iws
 .idea/
 
-#OS generated files
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -36,3 +36,6 @@ proguard/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Eclipse Preference File
+.settings/org.eclipse.jdt.core.prefs
