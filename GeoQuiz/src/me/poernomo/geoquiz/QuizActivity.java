@@ -76,7 +76,7 @@ public class QuizActivity extends Activity {
 			}
 		});
 
-		mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+//		mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
 		mQuestionTextView.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -111,6 +111,7 @@ public class QuizActivity extends Activity {
 
 	private void updateQuestion()
 	{
+//		Log.d(TAG, "Updating question text for question #" + mCurrentIndex, new Exception());
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
 		mQuestionTextView.setText(question);
 	}
