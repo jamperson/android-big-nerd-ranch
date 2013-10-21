@@ -29,7 +29,7 @@ public class QuizActivity extends Activity {
 			new TrueFalse(R.string.question_vancouver, false) };
 	
 	private int mCurrentIndex = 0;
-	private boolean mIsCheater;
+	private boolean mHasCheated;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -107,7 +107,7 @@ public class QuizActivity extends Activity {
 		if (savedInstanceState != null)
 		{
 			mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-			mIsCheater = savedInstanceState.getBoolean(KEY_CHEATER, false);
+			mHasCheated = savedInstanceState.getBoolean(KEY_CHEATER, false);
 		}
 		updateQuestion();
 
@@ -131,6 +131,7 @@ public class QuizActivity extends Activity {
 	{
 		// Log.d(TAG, "Updating question text for question #" + mCurrentIndex,
 		// new Exception());
+		mHasCheated = false; // TODO: detect which questions the user has cheated on
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
 		mQuestionTextView.setText(question);
 	}
@@ -139,7 +140,7 @@ public class QuizActivity extends Activity {
 	{
 		int messageResId;
 		boolean correctAnswer = mQuestionBank[mCurrentIndex].isTrueQuestion();
-		if (mIsCheater)
+		if (mHasCheated)
 			messageResId = R.string.judgment_toast;
 		else
 		{
@@ -159,7 +160,7 @@ public class QuizActivity extends Activity {
 		super.onSaveInstanceState(outState);
 		Log.i(TAG, "onSaveInstanceState");
 		outState.putInt(KEY_INDEX, mCurrentIndex);
-		outState.putBoolean(KEY_CHEATER, mIsCheater);
+		outState.putBoolean(KEY_CHEATER, mHasCheated);
 	}
 
 	@Override
@@ -167,7 +168,7 @@ public class QuizActivity extends Activity {
 	{
 		// super.onActivityResult(requestCode, resultCode, data);
 		if (data != null)
-			mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN,
+			mHasCheated = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN,
 					false);
 	}
 

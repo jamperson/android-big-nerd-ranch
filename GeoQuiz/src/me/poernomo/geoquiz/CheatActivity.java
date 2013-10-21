@@ -13,9 +13,11 @@ public class CheatActivity extends Activity {
 	private TextView mAnswerTextView;
 	private Button mShowAnswerButton;
 	private boolean mCheated = false;
+	private String mAnswerText="";
 
 	public static final String EXTRA_ANSWER_IS_TRUE = "me.poernomo.geoquiz.answer_is_true";
 	public static final String EXTRA_ANSWER_SHOWN = "me.poernomo.geoquiz.answer_shown";
+	private static final String KEY_ANSWER = "answer";
 	private static final String KEY_CHEATER = "cheater";
 
 	@Override
@@ -30,7 +32,11 @@ public class CheatActivity extends Activity {
 		mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
 		
 		if (savedInstanceState != null)
+		{
 			mCheated = savedInstanceState.getBoolean(KEY_CHEATER);
+			mAnswerText = savedInstanceState.getString(KEY_ANSWER);
+			mAnswerTextView.setText(mAnswerText);
+		}
 		setAnswerShownResult(mCheated); 
 
 		mShowAnswerButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +50,7 @@ public class CheatActivity extends Activity {
 					mAnswerTextView.setText(R.string.true_button);
 				else
 					mAnswerTextView.setText(R.string.false_button);
+				mAnswerText = (String) mAnswerTextView.getText();
 			}
 		});
 	}
@@ -53,6 +60,7 @@ public class CheatActivity extends Activity {
 	{
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(KEY_CHEATER, mCheated);
+		outState.putString(KEY_ANSWER, mAnswerText);
 	}
 
 	private void setAnswerShownResult(boolean answerShown)
