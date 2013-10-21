@@ -1,6 +1,7 @@
 package me.poernomo.geoquiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,8 +15,9 @@ public class QuizActivity extends Activity {
 
 	private static final String TAG = "QuizActivity";
 	private static final String KEY_INDEX = "index";
-	
-	private Button mTrueButton, mFalseButton;
+
+
+	private Button mTrueButton, mFalseButton, mCheatButton;
 	private ImageButton mNextButton, mPreviousButton;
 
 	private TextView mQuestionTextView;
@@ -28,8 +30,7 @@ public class QuizActivity extends Activity {
 	private int mCurrentIndex = 0;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle) called");
 		setContentView(R.layout.activity_quiz);
@@ -38,8 +39,7 @@ public class QuizActivity extends Activity {
 		mTrueButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				checkAnswer(true);
 			}
 		});
@@ -48,9 +48,19 @@ public class QuizActivity extends Activity {
 		mFalseButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				checkAnswer(false);
+			}
+		});
+
+		mCheatButton = (Button) findViewById(R.id.cheat_button);
+		mCheatButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, mQuestionBank[mCurrentIndex].isTrueQuestion());
+				startActivity(i);
 			}
 		});
 
@@ -58,8 +68,7 @@ public class QuizActivity extends Activity {
 		mNextButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				getNextQuestion();
 			}
@@ -69,25 +78,23 @@ public class QuizActivity extends Activity {
 		mPreviousButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				getPrevQuestion();
 			}
 		});
 
-//		mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+		mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
 		mQuestionTextView.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				getNextQuestion();
 
 			}
 		});
-		
-		if( savedInstanceState != null)
+
+		if (savedInstanceState != null)
 		{
 			mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
 		}
@@ -95,29 +102,26 @@ public class QuizActivity extends Activity {
 
 	}
 
-	private void getPrevQuestion()
-	{
+	private void getPrevQuestion() {
 		mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
 		if (mCurrentIndex < 0)
 			mCurrentIndex += mQuestionBank.length;
 		updateQuestion();
 	}
 
-	private void getNextQuestion()
-	{
+	private void getNextQuestion() {
 		mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
 		updateQuestion();
 	}
 
-	private void updateQuestion()
-	{
-//		Log.d(TAG, "Updating question text for question #" + mCurrentIndex, new Exception());
+	private void updateQuestion() {
+		// Log.d(TAG, "Updating question text for question #" + mCurrentIndex,
+		// new Exception());
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
 		mQuestionTextView.setText(question);
 	}
 
-	private void checkAnswer(boolean userPressedTrue)
-	{
+	private void checkAnswer(boolean userPressedTrue) {
 		int messageResId;
 		boolean correctAnswer = mQuestionBank[mCurrentIndex].isTrueQuestion();
 		if (correctAnswer == userPressedTrue)
@@ -130,56 +134,49 @@ public class QuizActivity extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState)
-	{
+	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		Log.i(TAG, "onSaveInstanceState");
 		outState.putInt(KEY_INDEX, mCurrentIndex);
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.d(TAG, "onDestroy() called");
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
 		Log.d(TAG, "onPause() called");
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		Log.d(TAG, "onResume() called");
 	}
 
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
 		Log.d(TAG, "onStart() called");
 	}
 
 	@Override
-	protected void onStop()
-	{
+	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
 		Log.d(TAG, "onStop() called");
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.quiz, menu);
 		return true;
