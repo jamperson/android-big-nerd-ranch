@@ -15,22 +15,25 @@ public class QuizActivity extends Activity {
 
 	private static final String TAG = "QuizActivity";
 	private static final String KEY_INDEX = "index";
-
+	private static final String KEY_CHEATER = "cheater";
 
 	private Button mTrueButton, mFalseButton, mCheatButton;
 	private ImageButton mNextButton, mPreviousButton;
-
 	private TextView mQuestionTextView;
+
 
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
 			new TrueFalse(R.string.question_canberra, true),
 			new TrueFalse(R.string.question_sydney, false),
 			new TrueFalse(R.string.question_bali, true),
 			new TrueFalse(R.string.question_vancouver, false) };
+	
 	private int mCurrentIndex = 0;
+	private boolean mIsCheater;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle) called");
 		setContentView(R.layout.activity_quiz);
@@ -39,7 +42,8 @@ public class QuizActivity extends Activity {
 		mTrueButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				checkAnswer(true);
 			}
 		});
@@ -48,7 +52,8 @@ public class QuizActivity extends Activity {
 		mFalseButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				checkAnswer(false);
 			}
 		});
@@ -57,10 +62,12 @@ public class QuizActivity extends Activity {
 		mCheatButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				Intent i = new Intent(QuizActivity.this, CheatActivity.class);
-				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, mQuestionBank[mCurrentIndex].isTrueQuestion());
-				startActivity(i);
+				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE,
+						mQuestionBank[mCurrentIndex].isTrueQuestion());
+				startActivityForResult(i, 0);
 			}
 		});
 
@@ -68,7 +75,8 @@ public class QuizActivity extends Activity {
 		mNextButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 
 				getNextQuestion();
 			}
@@ -78,7 +86,8 @@ public class QuizActivity extends Activity {
 		mPreviousButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 
 				getPrevQuestion();
 			}
@@ -88,7 +97,8 @@ public class QuizActivity extends Activity {
 		mQuestionTextView.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				getNextQuestion();
 
 			}
@@ -97,86 +107,113 @@ public class QuizActivity extends Activity {
 		if (savedInstanceState != null)
 		{
 			mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+			mIsCheater = savedInstanceState.getBoolean(KEY_CHEATER, false);
 		}
 		updateQuestion();
 
 	}
 
-	private void getPrevQuestion() {
+	private void getPrevQuestion()
+	{
 		mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
 		if (mCurrentIndex < 0)
 			mCurrentIndex += mQuestionBank.length;
 		updateQuestion();
 	}
 
-	private void getNextQuestion() {
+	private void getNextQuestion()
+	{
 		mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
 		updateQuestion();
 	}
 
-	private void updateQuestion() {
+	private void updateQuestion()
+	{
 		// Log.d(TAG, "Updating question text for question #" + mCurrentIndex,
 		// new Exception());
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
 		mQuestionTextView.setText(question);
 	}
 
-	private void checkAnswer(boolean userPressedTrue) {
+	private void checkAnswer(boolean userPressedTrue)
+	{
 		int messageResId;
 		boolean correctAnswer = mQuestionBank[mCurrentIndex].isTrueQuestion();
-		if (correctAnswer == userPressedTrue)
-			messageResId = R.string.correct_toast;
+		if (mIsCheater)
+			messageResId = R.string.judgment_toast;
 		else
-			messageResId = R.string.incorrect_toast;
+		{
+			if (correctAnswer == userPressedTrue)
 
+				messageResId = R.string.correct_toast;
+			else
+				messageResId = R.string.incorrect_toast;
+		}
 		Toast.makeText(QuizActivity.this, messageResId, Toast.LENGTH_SHORT)
 				.show();
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(Bundle outState)
+	{
 		super.onSaveInstanceState(outState);
 		Log.i(TAG, "onSaveInstanceState");
 		outState.putInt(KEY_INDEX, mCurrentIndex);
+		outState.putBoolean(KEY_CHEATER, mIsCheater);
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		// super.onActivityResult(requestCode, resultCode, data);
+		if (data != null)
+			mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN,
+					false);
+	}
+
+	@Override
+	protected void onDestroy()
+	{
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.d(TAG, "onDestroy() called");
 	}
 
 	@Override
-	protected void onPause() {
+	protected void onPause()
+	{
 		// TODO Auto-generated method stub
 		super.onPause();
 		Log.d(TAG, "onPause() called");
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume()
+	{
 		// TODO Auto-generated method stub
 		super.onResume();
 		Log.d(TAG, "onResume() called");
 	}
 
 	@Override
-	protected void onStart() {
+	protected void onStart()
+	{
 		// TODO Auto-generated method stub
 		super.onStart();
 		Log.d(TAG, "onStart() called");
 	}
 
 	@Override
-	protected void onStop() {
+	protected void onStop()
+	{
 		// TODO Auto-generated method stub
 		super.onStop();
 		Log.d(TAG, "onStop() called");
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.quiz, menu);
 		return true;
