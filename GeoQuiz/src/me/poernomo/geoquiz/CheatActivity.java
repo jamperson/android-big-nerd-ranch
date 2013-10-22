@@ -2,6 +2,7 @@ package me.poernomo.geoquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 public class CheatActivity extends Activity {
 
 	private boolean mAnswerIsTrue;
-	private TextView mAnswerTextView;
+	private TextView mAnswerTextView, mVersionTextView;
 	private Button mShowAnswerButton;
 	private boolean mCheated = false;
 	private String mAnswerText="";
@@ -27,6 +28,9 @@ public class CheatActivity extends Activity {
 		setContentView(R.layout.activity_cheat);
 		mAnswerIsTrue = getIntent()
 				.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+		
+		mVersionTextView = (TextView) findViewById(R.id.version_text_view);
+		mVersionTextView.setText("API Level " + Build.VERSION.SDK_INT);
 
 		mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
 		mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);

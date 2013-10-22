@@ -1,7 +1,10 @@
 package me.poernomo.geoquiz;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,29 +24,33 @@ public class QuizActivity extends Activity {
 	private ImageButton mNextButton, mPreviousButton;
 	private TextView mQuestionTextView;
 
-
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
 			new TrueFalse(R.string.question_canberra, true),
 			new TrueFalse(R.string.question_sydney, false),
 			new TrueFalse(R.string.question_bali, true),
 			new TrueFalse(R.string.question_vancouver, false) };
-	
+
 	private int mCurrentIndex = 0;
 	private boolean mHasCheated;
 
+	@TargetApi(11)
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle) called");
 		setContentView(R.layout.activity_quiz);
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+		{
+			ActionBar actionBar = getActionBar();
+			actionBar.setSubtitle("Around the World");
+		}
+		
 		mTrueButton = (Button) findViewById(R.id.true_button);
 		mTrueButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				checkAnswer(true);
 			}
 		});
@@ -52,8 +59,7 @@ public class QuizActivity extends Activity {
 		mFalseButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				checkAnswer(false);
 			}
 		});
@@ -62,8 +68,7 @@ public class QuizActivity extends Activity {
 		mCheatButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				Intent i = new Intent(QuizActivity.this, CheatActivity.class);
 				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE,
 						mQuestionBank[mCurrentIndex].isTrueQuestion());
@@ -75,8 +80,7 @@ public class QuizActivity extends Activity {
 		mNextButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				getNextQuestion();
 			}
@@ -86,8 +90,7 @@ public class QuizActivity extends Activity {
 		mPreviousButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				getPrevQuestion();
 			}
@@ -97,8 +100,7 @@ public class QuizActivity extends Activity {
 		mQuestionTextView.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				getNextQuestion();
 
 			}
@@ -113,31 +115,28 @@ public class QuizActivity extends Activity {
 
 	}
 
-	private void getPrevQuestion()
-	{
+	private void getPrevQuestion() {
 		mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
 		if (mCurrentIndex < 0)
 			mCurrentIndex += mQuestionBank.length;
 		updateQuestion();
 	}
 
-	private void getNextQuestion()
-	{
+	private void getNextQuestion() {
 		mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
 		updateQuestion();
 	}
 
-	private void updateQuestion()
-	{
+	private void updateQuestion() {
 		// Log.d(TAG, "Updating question text for question #" + mCurrentIndex,
 		// new Exception());
-		mHasCheated = false; // TODO: detect which questions the user has cheated on
+		mHasCheated = false; // TODO: detect which questions the user has
+								// cheated on
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
 		mQuestionTextView.setText(question);
 	}
 
-	private void checkAnswer(boolean userPressedTrue)
-	{
+	private void checkAnswer(boolean userPressedTrue) {
 		int messageResId;
 		boolean correctAnswer = mQuestionBank[mCurrentIndex].isTrueQuestion();
 		if (mHasCheated)
@@ -155,8 +154,7 @@ public class QuizActivity extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState)
-	{
+	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		Log.i(TAG, "onSaveInstanceState");
 		outState.putInt(KEY_INDEX, mCurrentIndex);
@@ -164,57 +162,50 @@ public class QuizActivity extends Activity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// super.onActivityResult(requestCode, resultCode, data);
 		if (data != null)
-			mHasCheated = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN,
-					false);
+			mHasCheated = data.getBooleanExtra(
+					CheatActivity.EXTRA_ANSWER_SHOWN, false);
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.d(TAG, "onDestroy() called");
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
 		Log.d(TAG, "onPause() called");
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		Log.d(TAG, "onResume() called");
 	}
 
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
 		Log.d(TAG, "onStart() called");
 	}
 
 	@Override
-	protected void onStop()
-	{
+	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
 		Log.d(TAG, "onStop() called");
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.quiz, menu);
 		return true;
