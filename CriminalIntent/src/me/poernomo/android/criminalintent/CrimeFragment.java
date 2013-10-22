@@ -21,17 +21,11 @@ public class CrimeFragment extends Fragment {
 	private Button mDateButton;
 	private CheckBox mSolvedCheckBox;
 
-	// private DateFormat df;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-
 		super.onCreate(savedInstanceState);
 		mCrime = new Crime();
-
-		// df = DateFormat.getDateInstance(DateFormat.LONG);
-
 	}
 
 	@Override
@@ -74,7 +68,6 @@ public class CrimeFragment extends Fragment {
 												// consult SimpleDateFormat
 		mDateButton.setText(DateFormat.format(df, mCrime.getDate()));
 
-		// mDateButton.setText(df.format(mCrime.getDate()));
 		mDateButton.setEnabled(false);
 
 		mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
