@@ -1,11 +1,10 @@
 package me.poernomo.android.criminalintent;
 
-import java.text.DateFormat;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,42 +20,48 @@ public class CrimeFragment extends Fragment {
 	private EditText mTitleField;
 	private Button mDateButton;
 	private CheckBox mSolvedCheckBox;
-	private DateFormat df; // TODO: format that date!
 
+	// private DateFormat df;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 
 		super.onCreate(savedInstanceState);
 		mCrime = new Crime();
-		
+
+		// df = DateFormat.getDateInstance(DateFormat.LONG);
 
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-			Bundle savedInstanceState) {
+			Bundle savedInstanceState)
+	{
 		View v = inflater.inflate(R.layout.fragment_crime, parent, false);
 
 		mTitleField = (EditText) v.findViewById(R.id.crime_title_edit_text);
 		mTitleField.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void afterTextChanged(Editable s) {
+			public void afterTextChanged(Editable s)
+			{
 				// Intentionally blank
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+					int after)
+			{
 				// Intentionally blank
 
 			}
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+					int count)
+			{
 				mCrime.setTitle(s.toString());
 
 			}
@@ -64,7 +69,12 @@ public class CrimeFragment extends Fragment {
 		});
 
 		mDateButton = (Button) v.findViewById(R.id.crime_date);
-		mDateButton.setText(mCrime.getDate().toString());
+
+		CharSequence df = "EEEE, d MMM, yyy"; // hardcoded stuff here, have to
+												// consult SimpleDateFormat
+		mDateButton.setText(DateFormat.format(df, mCrime.getDate()));
+
+		// mDateButton.setText(df.format(mCrime.getDate()));
 		mDateButton.setEnabled(false);
 
 		mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
@@ -72,7 +82,8 @@ public class CrimeFragment extends Fragment {
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
+							boolean isChecked)
+					{
 						mCrime.setSolved(isChecked);
 					}
 				});
