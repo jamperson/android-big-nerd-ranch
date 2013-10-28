@@ -14,6 +14,14 @@ public class Crime {
 	{
 		mId = UUID.randomUUID();
 		mDate= new Date();
+		mTitle = ""; 	// setting default value (no nulls please)
+		mSolved = false;// setting default value (no nulls please)
+	}
+	
+	@Override
+	public String toString()
+	{
+		return mTitle;
 	}
 
 	public Date getDate() {

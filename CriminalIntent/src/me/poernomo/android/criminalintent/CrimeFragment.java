@@ -22,40 +22,35 @@ public class CrimeFragment extends Fragment {
 	private CheckBox mSolvedCheckBox;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mCrime = new Crime();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-			Bundle savedInstanceState)
-	{
+			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_crime, parent, false);
 
 		mTitleField = (EditText) v.findViewById(R.id.crime_title_edit_text);
 		mTitleField.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void afterTextChanged(Editable s)
-			{
+			public void afterTextChanged(Editable s) {
 				// Intentionally blank
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after)
-			{
+					int after) {
 				// Intentionally blank
 
 			}
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count)
-			{
+					int count) {
 				mCrime.setTitle(s.toString());
 
 			}
@@ -75,8 +70,7 @@ public class CrimeFragment extends Fragment {
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked)
-					{
+							boolean isChecked) {
 						mCrime.setSolved(isChecked);
 					}
 				});
