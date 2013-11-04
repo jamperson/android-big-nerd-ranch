@@ -1,5 +1,11 @@
 <resources>
 
     <string name="app_name">NoteBook</string>
+    <string name="title_textView">Title</string>
+    <string name="new_title_hint">New Title</string>
+    <string name="content_textView">Content</string>
+    <string name="new_content_hint">Enter Content</string>
+    <string name="note_title_textView">Title</string>
+    <string name="note_content_textView">Content</string>
 
 </resources>
