@@ -20,8 +20,7 @@ public class DatePickerFragment extends DialogFragment {
 	public static final String EXTRA_DATE = "me.poernomo.android.criminalintent.date";
 	private Date mDate;
 
-	public static DatePickerFragment newInstance(Date date)
-	{
+	public static DatePickerFragment newInstance(Date date) {
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_DATE, date);
 
@@ -31,8 +30,7 @@ public class DatePickerFragment extends DialogFragment {
 		return fragment;
 	}
 
-	private void sendResult(int resultCode)
-	{
+	private void sendResult(int resultCode) {
 		if (getTargetFragment() == null)
 			return; // no target! aborting...
 		Intent i = new Intent();
@@ -42,8 +40,7 @@ public class DatePickerFragment extends DialogFragment {
 	}
 
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState)
-	{
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		mDate = (Date) getArguments().getSerializable(EXTRA_DATE);
 
 		Calendar calendar = Calendar.getInstance();
@@ -61,8 +58,7 @@ public class DatePickerFragment extends DialogFragment {
 
 			@Override
 			public void onDateChanged(DatePicker view, int year, int month,
-					int day)
-			{
+					int day) {
 				mDate = new GregorianCalendar(year, month, day).getTime();
 				getArguments().putSerializable(EXTRA_DATE, mDate);
 			}
@@ -77,8 +73,7 @@ public class DatePickerFragment extends DialogFragment {
 
 							@Override
 							public void onClick(DialogInterface dialog,
-									int which)
-							{
+									int which) {
 								sendResult(Activity.RESULT_OK);
 
 							}
