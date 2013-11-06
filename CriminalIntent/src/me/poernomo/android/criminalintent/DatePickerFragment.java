@@ -1,8 +1,6 @@
 package me.poernomo.android.criminalintent;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,9 +16,9 @@ import android.widget.DatePicker.OnDateChangedListener;
 public class DatePickerFragment extends DialogFragment {
 
 	public static final String EXTRA_DATE = "me.poernomo.android.criminalintent.date";
-	private Date mDate;
+	private Calendar mDate;
 
-	public static DatePickerFragment newInstance(Date date) {
+	public static DatePickerFragment newInstance(Calendar date) {
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_DATE, date);
 
@@ -30,24 +28,17 @@ public class DatePickerFragment extends DialogFragment {
 		return fragment;
 	}
 
-	private void sendResult(int resultCode) {
-		if (getTargetFragment() == null)
-			return; // no target! aborting...
-		Intent i = new Intent();
-		i.putExtra(EXTRA_DATE, mDate);
-		getTargetFragment().onActivityResult(getTargetRequestCode(),
-				resultCode, i);
-	}
-
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		mDate = (Date) getArguments().getSerializable(EXTRA_DATE);
+		Calendar myDate = (Calendar) (getArguments()
+				.getSerializable(EXTRA_DATE));
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(mDate);
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
+		mDate = (Calendar) myDate.clone(); // using clone so we don't change the
+											// values within Crime directly
+
+		int year = mDate.get(Calendar.YEAR);
+		int month = mDate.get(Calendar.MONTH);
+		int day = mDate.get(Calendar.DATE);
 
 		View v = getActivity().getLayoutInflater().inflate(
 				R.layout.dialog_date, null);
@@ -59,7 +50,10 @@ public class DatePickerFragment extends DialogFragment {
 			@Override
 			public void onDateChanged(DatePicker view, int year, int month,
 					int day) {
-				mDate = new GregorianCalendar(year, month, day).getTime();
+				// mDate = new GregorianCalendar(year, month, day).getTime();
+				mDate.set(Calendar.YEAR, year);
+				mDate.set(Calendar.MONTH, month);
+				mDate.set(Calendar.DAY_OF_MONTH, day);
 				getArguments().putSerializable(EXTRA_DATE, mDate);
 			}
 
@@ -75,9 +69,17 @@ public class DatePickerFragment extends DialogFragment {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								sendResult(Activity.RESULT_OK);
-
 							}
 
 						}).create();
+	}
+
+	private void sendResult(int resultCode) {
+		if (getTargetFragment() == null)
+			return; // no target! aborting...
+		Intent i = new Intent();
+		i.putExtra(EXTRA_DATE, mDate);
+		getTargetFragment().onActivityResult(getTargetRequestCode(),
+				resultCode, i);
 	}
 }

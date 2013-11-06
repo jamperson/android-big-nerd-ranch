@@ -1,5 +1,6 @@
 package me.poernomo.android.criminalintent;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -7,13 +8,13 @@ public class Crime {
 
 	private UUID mId;
 	private String mTitle;
-	private Date mDate;
+	private Calendar mDate;
 	private boolean mSolved;
 	
 	public Crime()
 	{
 		mId = UUID.randomUUID();
-		mDate= new Date();
+		mDate= Calendar.getInstance();
 		mTitle = ""; 	// setting default value (no nulls please)
 		mSolved = false;// setting default value (no nulls please)
 	}
@@ -24,11 +25,11 @@ public class Crime {
 		return mTitle;
 	}
 
-	public Date getDate() {
+	public Calendar getDate() {
 		return mDate;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Calendar date) {
 		mDate = date;
 	}
 

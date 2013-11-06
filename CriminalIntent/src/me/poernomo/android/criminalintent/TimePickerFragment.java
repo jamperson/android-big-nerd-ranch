@@ -1,10 +1,12 @@
 package me.poernomo.android.criminalintent;
 
 import java.util.Calendar;
-import java.util.Date;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
@@ -14,30 +16,26 @@ import android.widget.TimePicker.OnTimeChangedListener;
 public class TimePickerFragment extends DialogFragment {
 
 	public static final String EXTRA_DATE = "me.poernomo.android.criminalintent.date";
+	private Calendar mDate;
 
-	private Date mDate;
-
-	public static TimePickerFragment newInstance(Date date)
-	{
+	public static TimePickerFragment newInstance(Calendar date) {
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_DATE, date);
 
 		TimePickerFragment fragment = new TimePickerFragment();
 		fragment.setArguments(args);
-		return null;
+		return fragment;
 	}
 
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState)
-	{
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		mDate = (Date) getArguments().getSerializable(EXTRA_DATE);
+		Calendar myDate = (Calendar) getArguments().getSerializable(EXTRA_DATE);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(mDate);
+		mDate = (Calendar) myDate.clone();
 
-		Integer hour = calendar.get(Calendar.HOUR_OF_DAY) - 1;
-		Integer minute = calendar.get(Calendar.MINUTE) - 2;
+		int hour = mDate.get(Calendar.HOUR_OF_DAY);
+		int minute = mDate.get(Calendar.MINUTE);
 
 		View v = getActivity().getLayoutInflater().inflate(
 				R.layout.dialog_time, null);
@@ -49,20 +47,37 @@ public class TimePickerFragment extends DialogFragment {
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 
 			@Override
-			public void onTimeChanged(TimePicker arg0, int arg1, int arg2)
-			{
-				Calendar tempCal = Calendar.getInstance();
-				tempCal.setTime(mDate);
-				tempCal.set(Calendar.HOUR_OF_DAY, arg1);
-				tempCal.set(Calendar.MINUTE, arg2);
-				mDate = tempCal.getTime();
+			public void onTimeChanged(TimePicker arg0, int arg1, int arg2) {
+				mDate.set(Calendar.HOUR_OF_DAY, arg1);
+				mDate.set(Calendar.MINUTE, arg2);
 				getArguments().putSerializable(EXTRA_DATE, mDate);
 			}
 
 		});
 
-		return new AlertDialog.Builder(getActivity()).setView(v)
+		return new AlertDialog.Builder(getActivity())
+				.setView(v)
 				.setTitle(R.string.time_picker_title)
-				.setPositiveButton(android.R.string.ok, null).create();
+				.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								sendResults(Activity.RESULT_OK);
+
+							}
+
+						}).create();
 	}
+
+	private void sendResults(int resultCode) {
+		if (getTargetFragment() == null)
+			return;
+		Intent i = new Intent();
+		i.putExtra(EXTRA_DATE, mDate);
+		getTargetFragment().onActivityResult(this.getTargetRequestCode(),
+				resultCode, i);
+
+	}
+
 }
