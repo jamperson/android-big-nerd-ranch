@@ -16,14 +16,18 @@ public class CrimeLab {
 		mAppContext = appContext;
 		mCrimes = new ArrayList<Crime>();
 		
-		// dummy crime generator
-		for (int i = 0; i < 100; i++)
-		{
-			Crime c = new Crime();
-			mCrimes.add(c);	// experiment. what if we added the crime before setting title & solved?
-			c.setTitle("Crime #" + i);
-			c.setSolved(i % 2 == 0);
-		}
+//		// dummy crime generator
+//		for (int i = 0; i < 100; i++)
+//		{
+//			Crime c = new Crime();
+//			mCrimes.add(c);	// experiment. what if we added the crime before setting title & solved?
+//			c.setTitle("Crime #" + i);
+//			c.setSolved(i % 2 == 0);
+//		}
+	}
+	
+	public void addCrime(Crime c){
+		mCrimes.add(c);
 	}
 
 	public static CrimeLab get(Context c) {
