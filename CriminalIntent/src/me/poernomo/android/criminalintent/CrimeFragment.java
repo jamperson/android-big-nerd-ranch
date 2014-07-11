@@ -89,6 +89,7 @@ public class CrimeFragment extends Fragment {
 									// work
 	}
 
+	// this is to respond to pressing the "UP" caret / ancestral navigation
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -108,6 +109,7 @@ public class CrimeFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_crime, parent, false);
 
+		// turning on "UP" caret button on the action bar (ancestral navigation)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (NavUtils.getParentActivityName(getActivity()) != null) {
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
