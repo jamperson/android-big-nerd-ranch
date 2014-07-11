@@ -89,6 +89,12 @@ public class CrimeFragment extends Fragment {
 									// work
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		CrimeLab.get(getActivity()).saveCrimes();
+	}
+
 	// this is to respond to pressing the "UP" caret / ancestral navigation
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
