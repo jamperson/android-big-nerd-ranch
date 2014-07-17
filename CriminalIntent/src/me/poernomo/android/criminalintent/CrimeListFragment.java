@@ -70,14 +70,13 @@ public class CrimeListFragment extends ListFragment {
 
 				@Override
 				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-					// TODO Auto-generated method stub
+					// intentionally blank
 					return false;
 				}
 
 				@Override
 				public void onDestroyActionMode(ActionMode mode) {
-					// TODO Auto-generated method stub
-
+					// intentionally blank
 				}
 
 				@Override
@@ -110,7 +109,7 @@ public class CrimeListFragment extends ListFragment {
 				@Override
 				public void onItemCheckedStateChanged(ActionMode mode,
 						int position, long id, boolean checked) {
-					// TODO Auto-generated method stub
+					//  intentionally blank
 
 				}
 			});

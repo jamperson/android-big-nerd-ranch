@@ -15,6 +15,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,26 +89,6 @@ public class CrimeFragment extends Fragment {
 		mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
 		setHasOptionsMenu(true); // setting this to get ancestral navigation to
 									// work
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		CrimeLab.get(getActivity()).saveCrimes();
-	}
-
-	// this is to respond to pressing the "UP" caret / ancestral navigation
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			if (NavUtils.getParentActivityName(getActivity()) != null) {
-				NavUtils.navigateUpFromSameTask(getActivity());
-			}
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -193,6 +175,41 @@ public class CrimeFragment extends Fragment {
 		});
 
 		return v;
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		CrimeLab.get(getActivity()).saveCrimes();
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.fragment_crime, menu);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// this is to respond to pressing the "UP" caret / ancestral
+			// navigation
+			if (NavUtils.getParentActivityName(getActivity()) != null) {
+				NavUtils.navigateUpFromSameTask(getActivity());
+			}
+			return true;
+		case R.id.menu_item_delete_crime:
+			CrimeLab.get(getActivity()).deleteCrime(mCrime);
+			// need to think of cases where the activity has no parent for some reason
+			if (NavUtils.getParentActivityName(getActivity()) != null) {
+				NavUtils.navigateUpFromSameTask(getActivity());
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }
