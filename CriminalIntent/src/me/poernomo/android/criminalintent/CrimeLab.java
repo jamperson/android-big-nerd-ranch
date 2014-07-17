@@ -24,6 +24,7 @@ public class CrimeLab {
 		mSerializer = new CriminalIntentJSONSerializer(mAppContext, FILENAME);
 
 		try {
+			Log.d(TAG, "attempting to load crimes");
 			mCrimes = mSerializer.loadCrimes();
 		} catch (Exception e) {
 			mCrimes = new ArrayList<Crime>();
