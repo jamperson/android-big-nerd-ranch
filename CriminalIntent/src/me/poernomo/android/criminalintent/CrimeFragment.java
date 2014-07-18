@@ -6,6 +6,7 @@ import java.util.UUID;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class CrimeFragment extends Fragment {
 
@@ -38,6 +40,7 @@ public class CrimeFragment extends Fragment {
 	private EditText mTitleField;
 	private Button mDateButton, mTimeButton;
 	private CheckBox mSolvedCheckBox;
+	private ImageButton mPhotoButton;
 
 	public static CrimeFragment newInstance(UUID crimeId) {
 		Bundle args = new Bundle();
@@ -174,6 +177,24 @@ public class CrimeFragment extends Fragment {
 			}
 		});
 
+		mPhotoButton = (ImageButton) v.findViewById(R.id.crime_imageButton);
+		mPhotoButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getActivity(), CrimeCameraActivity.class);
+				startActivity(i);
+
+			}
+		});
+
+		// check for camera availability
+		PackageManager pm = getActivity().getPackageManager();
+		if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+				&& !pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
+			mPhotoButton.setEnabled(false);
+		}
+
 		return v;
 	}
 
@@ -202,7 +223,8 @@ public class CrimeFragment extends Fragment {
 			return true;
 		case R.id.menu_item_delete_crime:
 			CrimeLab.get(getActivity()).deleteCrime(mCrime);
-			// need to think of cases where the activity has no parent for some reason
+			// need to think of cases where the activity has no parent for some
+			// reason
 			if (NavUtils.getParentActivityName(getActivity()) != null) {
 				NavUtils.navigateUpFromSameTask(getActivity());
 			}
